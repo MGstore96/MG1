@@ -36,14 +36,14 @@ const lines = [];
 function hostOk() {
     var m = document.getElementById("msgs");
     if (m) {
-        m.innerHTML = "GoldHEN v2.4b18.12 Loaded ...";
+        m.innerHTML ='<span style="color: #10e610;">GoldHEN Berhasil Dimuat ...</span>';
     }
 }
 
 function hostFail() {
     var m = document.getElementById("msgs");
     if (m) {
-        m.innerHTML = "Failed to Load! Restart Your Console ...";
+        m.innerHTML = "Gagal Memuat! Mulai Ulang Konsol Anda ...";
         m.style.color = "yellow";
     }
 }
@@ -277,7 +277,7 @@ function makeRpc(worker) {
 
         let payload = null;
         try {
-            const prsp = await fetch("goldhen_2.4b18.12.bin");
+            const prsp = await fetch("goldhen_v2.4b18.12.bin");
             if (prsp.ok) payload = new Uint8Array(await prsp.arrayBuffer());
         } catch (e) {
             mark("PAYLOAD-FETCH-FAILED", (e && e.message) ? e.message : String(e));
@@ -676,7 +676,7 @@ function makeRpc(worker) {
                 mark("ALREADY-ROOT", "getuid=" + uid0 + " setuid(0)=" + su0);
                 var m = document.getElementById("msgs");
                 if (m) {
-                    m.innerHTML = "GoldHEN is Already Loaded ...";
+                    m.innerHTML ='<span style="color: #10e610;">GoldHEN Sudah Dimuat ...</span>';
                 }
                 return;
             }

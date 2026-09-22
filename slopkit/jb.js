@@ -30,14 +30,14 @@ const STOP_BEFORE_DOUBLE = params.get("stop") === "beforedouble";
 function hostOk() {
   var m = document.getElementById("msgs");
   if (m) {
-    m.innerHTML = "GoldHEN v2.4b18.12 Loaded ...";
+    m.innerHTML ='<span style="color: #10e610;">GoldHEN Berhasil Dimuat ...</span>';
   }
 }
 
 function hostFail() {
   var m = document.getElementById("msgs");
   if (m) {
-    m.innerHTML = "Failed to Load! Restart Your Console ...";
+    m.innerHTML = "Gagal Memuat! Mulai Ulang Konsol Anda ...";
     m.style.color = "yellow";
   }
 }
@@ -45,7 +45,7 @@ function hostFail() {
 function hostAlready() {
   var m = document.getElementById("msgs");
   if (m) {
-    m.innerHTML = "GoldHEN is Already Loaded ...";
+    m.innerHTML ='<span style="color: #10e610;">GoldHEN Sudah Dimuat ...</span>';
   }
 }
 
