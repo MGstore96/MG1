@@ -1,12 +1,11 @@
-<!DOCTYPE html>
 <html lang="id" manifest="slopkit.manifest">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PS4 [5.05] 7.00 - 13.52 FW GoldHEN Host by GamerHack</title>
-<link rel="stylesheet" href="../style.css">
+<title>7.00 - 13.52 Webkit by MGstore</title>
+<link rel="stylesheet" href="style.css">
 <style>
-    /* Styling Tampilan Modern & Gaming Theme */
+    /* Styling Tampilan Modern & Gaming Theme (Selaras dengan index.html) */
     * {
         box-sizing: border-box;
         margin: 0;
@@ -51,7 +50,7 @@
 
     .header-title {
         color: #e1e8ea;
-        font-size: 22px;
+        font-size: 26px;
         font-weight: 700;
         letter-spacing: 1px;
         text-transform: none;
@@ -71,7 +70,7 @@
 
     /* msgs secara default berwarna putih (running) */
     #msgs {
-        font-size: 20px;
+        font-size: 22px;
         color: #ffffff; 
         font-weight: 600;
         line-height: 1.5;
@@ -136,16 +135,6 @@
         border-radius: 6px;
         font-size: 13px;
         font-weight: 500;
-        text-decoration: none;
-    }
-
-    .credit-item a {
-        color: #38bdf8;
-        text-decoration: none;
-    }
-
-    .credit-item a:hover {
-        text-decoration: underline;
     }
 
     footer {
@@ -165,7 +154,7 @@ history.go(-histlength);
 // Helper function untuk pesan status
 function setMsg(htmlContent, type) {
     var msgsElem = document.getElementById("msgs");
-    if (!msgsElem) return;
+    if(!msgsElem) return;
     
     msgsElem.className = ""; // Reset class
     if (type === "success") {
@@ -178,7 +167,7 @@ function setMsg(htmlContent, type) {
 
 function DLProgress(e){
     Percent = Math.round(e.loaded / e.total * 100);
-    setMsg("Installing Offline Cache: " + Percent + "%", "running");
+    setMsg("Menginstal Cache Offline: " + Percent + "%", "running");
     
     // Update persentase progress bar
     var bar = document.getElementById("pbar");
@@ -188,35 +177,37 @@ function DLProgress(e){
 }
 
 function DisplayCacheProgress(){
-    setMsg("Cache Installed Successfully ✔", "success");
+    setMsg("Cache Berhasil Diinstal", "success");
     var bar = document.getElementById("pbar");
     if (bar) {
         bar.style.width = "100%";
     }
+    // Mengarahkan kembali ke menu utama (index.html) setelah 1 detik
     setTimeout(function(){
-        setMsg("Now Close And Re-Open Your Browser ...", "success");
+        window.location.href = "index.html";
     }, 1500);
 }
+
 
 window.applicationCache.addEventListener("progress", DLProgress, false);
 window.applicationCache.oncached = function(e){ DisplayCacheProgress(); };
 window.applicationCache.onupdateready = function(e){ DisplayCacheProgress(); };
 window.applicationCache.onerror = function(e){
-    setMsg("Error Installing Cache! - Clear and Re-Open Your Browser ...", "error");
+    setMsg("Kesalahan Saat Menginstal Cache! - Bersihkan dan Buka Kembali Browser Anda ...", "error");
 };
 </script>
 
 <div class="container">
+    <!-- Container Logo Tengah Atas -->
     <div class="logo-container">
-        <img src="logo.png" alt="Logo" class="logo">
+        <img src="logo.png" alt="Logo MGstore" class="logo">
     </div>
 
-    <div class="header-title">
-        PS4 [5.05] 7.00 - 13.52 FW GoldHEN Host by GamerHack
-    </div>
-
+    <div class="header-title">Webkit By MG Store
+    
     <div class="status-card">
-        <div id="msgs">Starting Cache Installation...</div>
+        <!-- Teks default running berwarna putih -->
+        <div id="msgs">Memulai Instalasi Cache...</div>
         <div class="progress-container">
             <div id="pbar" class="progress-bar"></div>
         </div>
@@ -226,25 +217,25 @@ window.applicationCache.onerror = function(e){
         <h3>Special Thanks to:</h3>
         <div class="credits-list">
             <span class="credit-item">GamerHack93</span>
-            <span class="credit-item"><a href="https://twitter.com/_AlAzif" target="_blank">@_AlAzif</a></span>
-            <span class="credit-item">ChendoChap</span>
-            <span class="credit-item"><a href="https://x.com/Kameleonre_" target="_blank">@Kameleonre_</a></span>
-            <span class="credit-item">SiSTR0</span>
-            <span class="credit-item"><a href="https://twitter.com/Prb29327239" target="_blank">@Prb29327239</a></span>
             <span class="credit-item">sleirsgoevy</span>
             <span class="credit-item">TheFlow</span>
             <span class="credit-item">Flatz</span>
             <span class="credit-item">Egycnq</span>
             <span class="credit-item">Jordy</span>
             <span class="credit-item">Sonic-Iso</span>
-            <span class="credit-item">Abc</span>
             <span class="credit-item">Feyzee61</span>
+            <span class="credit-item">abc</span>
+            <span class="credit-item">AlAzif</span>
+            <span class="credit-item">ChendoChap</span>
+            <span class="credit-item">Kameleonre_</span>
+            <span class="credit-item">SiSTR0</span>
+            <span class="credit-item">Prb29327239</span>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>&copy; PS4 GoldHEN Host Webkit</p>
+    <p>&copy; MGstore Webkit Host</p>
 </footer>
 
 </body>
