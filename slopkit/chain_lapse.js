@@ -3543,7 +3543,6 @@ function makeRpc(worker) {
                                                     : "returned " + rc);
                                             payloadRunning = launched;
                                             if (launched) {
-                                                hostOk();
                                                 mark("PAYLOAD-RUNNING", "bytes="
                                                     + payload.length + " entry="
                                                     + entry);
@@ -3842,6 +3841,9 @@ function makeRpc(worker) {
                 hostFail();
             }
         } else if (repaired && cleanupDone) {
+			if (payloadRunning) {
+                hostOk();
+            }
             mark("SAFE-TO-EXIT", "chunkX=freed-once-by-fd" + pktoptsTwins[0]
                 + " chunkY=leaked-0x80 pipes=+1ref-each"
                 + " leaks=2-pipe-pairs+0x80");
