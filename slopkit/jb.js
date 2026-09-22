@@ -45,7 +45,7 @@ function hostFail() {
 function hostAlready() {
   var m = document.getElementById("msgs");
   if (m) {
-    m.innerHTML = '<span style="color: #10e610;">GoldHEN Sudah Dimuat ...</span>';
+    m.innerHTML ='<span style="color: #10e610;">GoldHEN Sudah Dimuat ...</span>';
   }
 }
 
