@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id" manifest="700.manifest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7.00 - 13.00 Webkit by MGstore</title>
+<link rel="stylesheet" href="style.css">
+<style>
+    /* Styling Tampilan Modern & Gaming Theme (Selaras dengan index.html) */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #0f172a;
+        color: #f8fafc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .container {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 800px;
+        padding: 30px 20px;
+        margin: auto;
+    }
+
+    /* Logo Styling */
+    .logo-container {
+        margin-bottom: 15px;
+    }
+
+    .logo {
+        max-width: 100px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .header-title {
+        color: #e1e8ea;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: none;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #334155;
+        padding-bottom: 15px;
+    }
+
+    .status-card {
+        background: #0f172a;
+        border-radius: 12px;
+        border: 1px solid #38bdf8;
+        padding: 30px 20px;
+        margin: 20px 0;
+        box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.1);
+    }
+
+    /* msgs secara default berwarna putih (running) */
+    #msgs {
+        font-size: 22px;
+        color: #ffffff; 
+        font-weight: 600;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        transition: color 0.3s ease;
+    }
+
+    /* Class untuk pesan sukses (warna hijau) */
+    #msgs.success {
+        color: #22c55e !important;
+    }
+
+    /* Class untuk pesan error (warna merah) */
+    #msgs.error {
+        color: #e50707 !important;
+    }
+
+    /* Styling Progress Bar */
+    .progress-container {
+        width: 100%;
+        background-color: #334155;
+        border-radius: 10px;
+        overflow: hidden;
+        height: 16px;
+        margin-top: 15px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #38bdf8, #818cf8);
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    .thanks-section {
+        margin-top: 30px;
+        font-size: 14px;
+        color: #94a3b8;
+        border-top: 1px solid #334155;
+        padding-top: 20px;
+    }
+
+    .thanks-section h3 {
+        color: #f00830;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .credits-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .credit-item {
+        background: #334155;
+        color: #cbd5e1;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #64748b;
+    }
+</style>
+</head>
+<body>
+
+<script>
+history.replaceState(null,null,'index.html');
+var histlength=history.length;
+history.go(-histlength);
+
+// Helper function untuk pesan status
+function setMsg(htmlContent, type) {
+    var msgsElem = document.getElementById("msgs");
+    if(!msgsElem) return;
+    
+    msgsElem.className = ""; // Reset class
+    if (type === "success") {
+        msgsElem.classList.add("success");
+    } else if (type === "error") {
+        msgsElem.classList.add("error");
+    }
+    msgsElem.innerHTML = htmlContent;
+}
+
+function DLProgress(e){
+    Percent = Math.round(e.loaded / e.total * 100);
+    setMsg("Menginstal Cache Offline: " + Percent + "%", "running");
+    
+    // Update persentase progress bar
+    var bar = document.getElementById("pbar");
+    if (bar) {
+        bar.style.width = Percent + "%";
+    }
+}
+
+function DisplayCacheProgress(){
+    setMsg("Cache Berhasil Diinstal", "success");
+    var bar = document.getElementById("pbar");
+    if (bar) {
+        bar.style.width = "100%";
+    }
+    // Mengarahkan kembali ke menu utama (index.html) setelah 1 detik
+    setTimeout(function(){
+        window.location.href = "index.html";
+    }, 1500);
+}
+
+
+window.applicationCache.addEventListener("progress", DLProgress, false);
+window.applicationCache.oncached = function(e){ DisplayCacheProgress(); };
+window.applicationCache.onupdateready = function(e){ DisplayCacheProgress(); };
+window.applicationCache.onerror = function(e){
+    setMsg("Kesalahan Saat Menginstal Cache! - Bersihkan dan Buka Kembali Browser Anda ...", "error");
+};
+</script>
+
+<div class="container">
+    <!-- Container Logo Tengah Atas -->
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo MGstore" class="logo">
+    </div>
+
+    <div class="header-title">Webkit By MG Store
+    
+    <div class="status-card">
+        <!-- Teks default running berwarna putih -->
+        <div id="msgs">Memulai Instalasi Cache...</div>
+        <div class="progress-container">
+            <div id="pbar" class="progress-bar"></div>
+        </div>
+    </div>
+
+    <div class="thanks-section">
+        <h3>Special Thanks to:</h3>
+        <div class="credits-list">
+            <span class="credit-item">GamerHack93</span>
+            <span class="credit-item">sleirsgoevy</span>
+            <span class="credit-item">TheFlow</span>
+            <span class="credit-item">Flatz</span>
+            <span class="credit-item">Egycnq</span>
+            <span class="credit-item">Jordy</span>
+            <span class="credit-item">Sonic-Iso</span>
+            <span class="credit-item">Feyzee61</span>
+            <span class="credit-item">AlAzif</span>
+            <span class="credit-item">ChendoChap</span>
+            <span class="credit-item">Kameleonre_</span>
+            <span class="credit-item">SiSTR0</span>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; MGstore Webkit Host</p>
+</footer>
+
+</body>
+</html>
