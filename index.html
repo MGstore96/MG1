@@ -160,21 +160,29 @@ if (!isPS4) {
     });
 } else {
     if (window.applicationCache.status == '0') {
-        if (fwNum >= 7.00 && fwNum <= 8.52) {
+        if (fwNum == 5.05 || fwNum == 5.07) {
+            window.location.replace("cache505.html");
+        } else if (fwNum >= 7.00 && fwNum <= 8.52) {
             window.location.replace("cache700.html");
         } else if (fwNum >= 9.00 && fwNum <= 9.60) {
             window.location.replace("cache900.html");
         } else if (fwNum >= 10.00 && fwNum <= 11.02) {
             window.location.replace("cachecss.html");
         } else if (fwNum >= 11.50 && fwNum <= 13.52) {
-            window.location.replace("cacheslopkit.html")
+            window.location.replace("cacheslopkit.html");
         } else {
             document.addEventListener("DOMContentLoaded", () => {
-                setMsg('Unsupported Firmware: ' + fwVersion, "error");
+                msgs.innerHTML = 'Unsupported Firmware: <span style="color: red;">' + fwVersion + '</span>';
             });
         }
     } else {
-        if (fwNum >= 7.00 && fwNum <= 8.52) {
+        if (fwNum == 5.05 || fwNum == 5.07) {
+            var script = document.createElement('script');
+            script.src = "505/exploit.js";
+            script.onerror = onScriptError;
+            document.head.appendChild(script);
+        }
+        else if (fwNum >= 7.00 && fwNum <= 8.52) {
             var script = document.createElement('script');
             script.type = 'module';
             script.src = "700/alert.js";
@@ -218,7 +226,7 @@ if (!isPS4) {
             script.type = 'module';
             script.src = "slopkit/jb.js?v=10";
             script.onerror = onScriptError;
-            document.head.appendChild(script);  
+            document.head.appendChild(script);
         }
     }
 }
