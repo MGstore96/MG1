@@ -2322,7 +2322,9 @@ let payloadRunning = false;
                             + " sites=" + KPATCH_JMP_SITES.length);
                     }
 
-                    if (payload && (kpatched || params.get("payload") === "1")
+                    if (rebootRequired) {
+                        mark("PAYLOAD-SKIPPED", "cleanup incomplete / zone dirty -- reboot required");
+                    } else if (payload && (kpatched || params.get("payload") === "1")
                         && params.get("payload") !== "0") {
                         state("payload...", "warn");
                         const sz = (payload.length + 0x3fff) & ~0x3fff;
@@ -2363,7 +2365,7 @@ let payloadRunning = false;
                                     if (payloadRunning) {
                                         mark("PAYLOAD-RUNNING",
                                             "bytes=" + payload.length + " entry=" + entry);
-                                        hostOk();
+										hostOk();
                                     }
                                 }
                             }
