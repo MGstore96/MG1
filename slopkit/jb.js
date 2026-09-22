@@ -242,8 +242,7 @@ let allDone = false,
 
     const KPATCH_FILE =
       "slopkit/patches/" + (off.kpatch || fwKey.replace(".", "") + ".bin");
-    const PAYLOAD_FILE = "goldhen_v2.4b18.12.bin";
-    const needPatch = ["k_sysent_661", "k_jmp_rsi"].filter(
+    const PAYLOAD_FILE = "goldhen_v2.4b18.12.bin"].filter(
       (k) => off[k] === undefined,
     );
     if (
