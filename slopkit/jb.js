@@ -3,14 +3,52 @@ import { installWindowP, pairStatus } from "./mem.js";
 import { int64 } from "./int64.js";
 import { offsetsFor } from "./ps4_offsets.js";
 
-const outEl = document.getElementById("out");
-const stateEl = document.getElementById("state");
+function ensureHostConsole() {
+  var out = document.getElementById("out");
+  var st = document.getElementById("state");
+  if (!out) {
+    out = document.createElement("pre");
+    out.id = "out";
+    (document.body || document.documentElement).appendChild(out);
+  }
+  if (!st) {
+    st = document.createElement("div");
+    st.id = "state";
+    (document.body || document.documentElement).appendChild(st);
+  }
+  return { outEl: out, stateEl: st };
+
+}
+var _hostCons = ensureHostConsole();
+const outEl = _hostCons.outEl;
+const stateEl = _hostCons.stateEl;
 const lines = [];
 let passCount = 0,
   failCount = 0;
-let armedEver = false;
 const params = new URLSearchParams(location.search);
 const STOP_BEFORE_DOUBLE = params.get("stop") === "beforedouble";
+
+function hostOk() {
+  var m = document.getElementById("msgs");
+  if (m) {
+    m.innerHTML ='<span style="color: #10e610;">GoldHEN Berhasil Dimuat ...</span>';
+  }
+}
+
+function hostFail() {
+  var m = document.getElementById("msgs");
+  if (m) {
+    m.innerHTML = "Gagal Memuat! Mulai Ulang Konsol Anda ...";
+    m.style.color = "yellow";
+  }
+}
+
+function hostAlready() {
+  var m = document.getElementById("msgs");
+  if (m) {
+    m.innerHTML ='<span style="color: #10e610;">GoldHEN Sudah Dimuat ...</span>';
+  }
+}
 
 function post(tag, detail) {
   try {
