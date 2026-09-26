@@ -103,13 +103,13 @@ function mark(tag, detail) {
       .map(function (l) {
         l = esc(l);
         const c =
-          /FAIL|ERROR|THREW|REBOOT|MISS|LOST|POISON|TIMEOUT|MISMATCH|ABORTED/i.test(
+          /FAIL|ERROR|THREW|REBOOT|MISS|LOST|POISON|TIMEOUT|MISMATCH|ABORTED|GIVEUP|NO-STORAGE|UNSEEN/i.test(
             l,
           )
             ? "bad"
-            : /WARN|SKIP|REFUSED|COMMITTED|DIRTY/i.test(l)
+            : /WARN|SKIP|REFUS|COMMITTED|DIRTY/i.test(l)
               ? "warn"
-              : /\bOK\b|PASS|ACHIEVED|RUNNING|ARMED/i.test(l)
+              : /\bOK\b|\bPASS\b|PASS=|ACHIEVED|RUNNING|ARMED/i.test(l)
                 ? "ok"
                 : "";
         return c ? '<span class="' + c + '">' + l + "</span>" : l;
@@ -162,6 +162,7 @@ const SYS = {
   aio_multi_wait: 663,
   aio_multi_cancel: 666,
   aio_submit_cmd: 669,
+  write :4,
   sysctl: 202,
   kill: 37,
   getppid: 39,
@@ -191,6 +192,7 @@ let allDone = false,
     });
 
     const { key, off } = offsetsFor(navigator.userAgent);
+    mark("BUILD", "jb=skipjb2 base=ef1670a");
     mark("FW", key || "(not a PS4 UA)");
     if (!off) {
       state("no offsets for this firmware", "bad");
@@ -209,7 +211,8 @@ let allDone = false,
     const DO_JB = params.get("jb") !== "0";
     const DO_PATCH = params.get("patch") !== "0";
     const DO_PAYLOAD = params.get("payload") !== "0";
-
+    const SKIPJB = params.get("skipjb") !== "0";
+    
     const KEEP_JB = params.get("keepjb") === "1";
 
     const NEED_K = [
@@ -295,13 +298,13 @@ let allDone = false,
     // A hard KP (a total reclaim miss that faults inside the cancel walk)
     // cannot be caught here and still needs a reboot -- this only recovers
     // the benign, detectable misses.
-    const RETRY_MAX = params.get("retry")
-      ? parseInt(params.get("retry"), 10)
-      : 8;
+    const retryArg = parseInt(params.get("retry") || "", 10);
+    const RETRY_MAX = Number.isFinite(retryArg) && retryArg >= 0 ? retryArg : 4;
     const RETRY_KEY = "jb1352-read-retry";
     const retryCount = () => {
       try {
-        return parseInt(sessionStorage.getItem(RETRY_KEY) || "0", 10) || 0;
+        const v = parseInt(sessionStorage.getItem(RETRY_KEY) || "0", 10);
+        return Number.isFinite(v) && v > 0 ? v : 0;
       } catch (e) {
         return 0;
       }
@@ -322,17 +325,18 @@ let allDone = false,
       }
       try {
         sessionStorage.setItem(RETRY_KEY, String(n + 1));
-      } catch (e) {}
-      mark(
-        "AUTO-RETRY",
-        "why=" +
-          why +
-          " reload " +
-          (n + 1) +
-          "/" +
-          RETRY_MAX +
-          " (benign read miss, no kernel write yet)",
-      );
+      stored = parseInt(sessionStorage.getItem(RETRY_KEY) || "-1", 10);
+      } catch (e) {
+        stored = -1;
+      }
+      if (stored !== n + 1) {
+        mark(
+          "AUTO-RELOAD-NO-STORAGE",
+          "why=" + why + " wrote=" + (n + 1) + " read=" + stored,
+        );
+        return false;
+      }
+      mark("AUTO-RELOAD", "why=" + why + " reload=" + (n + 1) + "/" + RETRY_MAX);
       setTimeout(() => {
         try {
           location.reload();
@@ -341,10 +345,7 @@ let allDone = false,
       return true;
     };
     if (retryCount() > 0)
-      mark(
-        "AUTO-RETRY-RESUME",
-        "read-phase retry " + retryCount() + "/" + RETRY_MAX,
-      );
+      mark("AUTO-RELOAD-RESUME", "reload=" + retryCount() + "/" + RETRY_MAX);
 
     state("running the primitive...", "warn");
     await new Promise((r) => setTimeout(r, 0));
